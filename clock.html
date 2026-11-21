@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .clock-container {
+            background: #1e293b;
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+            text-align: center;
+            border: 2px solid #334155;
+        }
+        #time {
+            font-size: 4.5rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+        }
+        #date {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+        button {
+            background: transparent;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="clock-container">
+    <div id="time">00:00:00</div>
+    <div id="date">Loading date...</div>
+    <button id="toggleFormat" onclick="toggleFormat()">Switch to 24-Hour Format</button>
+</div>
+
+<script>
+    let is24Hour = false;
+
+    function updateClock() {
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        let session = '';
+
+        if (!is24Hour) {
+            session = hours >= 12 ? ' PM' : ' AM';
+            hours = hours % 12 || 12;
+        }
+
+        hours = String(hours).padStart(2, '0');
+        document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}${session}`;
+
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('date').textContent = now.toLocaleDateString(undefined, options);
+    }
+
+    function toggleFormat() {
+        is24Hour = !is24Hour;
+        document.getElementById('toggleFormat').textContent = is24Hour 
+            ? 'Switch to 12-Hour Format' 
+            : 'Switch to 24-Hour Format';
+        updateClock();
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+
+</body>
+</html>
